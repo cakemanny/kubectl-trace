@@ -57,8 +57,8 @@ const (
 
 var (
 	ContainerDependencies = []string{
-		"quay.io/iovisor/target-ruby",
-		"quay.io/iovisor/kubectl-trace-init",
+		"ghcr.io/cakemanny/target-ruby",
+		"ghcr.io/cakemanny/kubectl-trace-init",
 	}
 )
 
