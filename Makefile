@@ -10,7 +10,7 @@ GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
 GIT_BRANCH_CLEAN := $(shell echo $(GIT_BRANCH) | sed -e "s/[^[:alnum:]]/-/g")
 
 DOCKER_REGISTRY ?= ghcr.io
-GIT_ORG ?= iovisor
+GIT_ORG ?= cakemanny
 
 DOCKER_BUILD_PROGRESS ?= auto
 

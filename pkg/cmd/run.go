@@ -24,11 +24,11 @@ var (
 	// ImageName represents the default tracerunner image
 	ImageName = "ghcr.io/cakemanny/kubectl-trace-runner"
 	// ImageTag represents the tag to fetch for ImageName
-	ImageTag = "latest"
+	ImageTag = "fork"
 	// InitImageName represents the default init container image
 	InitImageName = "ghcr.io/cakemanny/kubectl-trace-init"
 	// InitImageTag represents the tag to fetch for InitImage
-	InitImageTag = "latest"
+	InitImageTag = "fork"
 	// DefaultDeadline is the maximum time a tracejob is allowed to run, in seconds
 	DefaultDeadline = 3600
 	// DefaultDeadlineGracePeriod is the maximum time to wait to print a map or histogram, in seconds
