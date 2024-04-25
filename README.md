@@ -1,3 +1,7 @@
+> [!NOTE]
+> This branch contains changes so that build is publish to ghcr.io/cakemanny
+> for further testing.
+
 ![Kubectl trace Logo](docs/logo/logo-sm.png)
 
 `kubectl trace` is a kubectl plugin that allows you to schedule the execution

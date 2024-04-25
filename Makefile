@@ -9,12 +9,13 @@ GIT_TAG    ?= $(shell git describe 2> /dev/null)
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null)
 GIT_BRANCH_CLEAN := $(shell echo $(GIT_BRANCH) | sed -e "s/[^[:alnum:]]/-/g")
 
+DOCKER_REGISTRY ?= ghcr.io
 GIT_ORG ?= iovisor
 
 DOCKER_BUILD_PROGRESS ?= auto
 
-IMAGE_NAME_INITCONTAINER ?= quay.io/$(GIT_ORG)/kubectl-trace-init
-IMAGE_NAME_TRACERUNNER ?= quay.io/$(GIT_ORG)/kubectl-trace-runner
+IMAGE_NAME_INITCONTAINER ?= $(DOCKER_REGISTRY)/$(GIT_ORG)/kubectl-trace-init
+IMAGE_NAME_TRACERUNNER ?= $(DOCKER_REGISTRY)/$(GIT_ORG)/kubectl-trace-runner
 
 IMAGE_TRACERUNNER_BRANCH := $(IMAGE_NAME_TRACERUNNER):$(GIT_BRANCH_CLEAN)
 IMAGE_TRACERUNNER_COMMIT := $(IMAGE_NAME_TRACERUNNER):$(GIT_COMMIT)
@@ -27,9 +28,6 @@ IMAGE_INITCONTAINER_TAG    := $(IMAGE_NAME_INITCONTAINER):$(GIT_TAG)
 IMAGE_INITCONTAINER_LATEST := $(IMAGE_NAME_INITCONTAINER):latest
 
 IMAGE_BUILD_FLAGS_EXTRA ?= # convenience to allow to specify extra build flags with env var, defaults to nil
-
-IMG_REPO ?= quay.io/iovisor/
-IMG_SHA ?= latest
 
 BPFTRACEVERSION ?= "v0.13.0"
 

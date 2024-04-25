@@ -22,11 +22,11 @@ import (
 
 var (
 	// ImageName represents the default tracerunner image
-	ImageName = "quay.io/iovisor/kubectl-trace-runner"
+	ImageName = "ghcr.io/cakemanny/kubectl-trace-runner"
 	// ImageTag represents the tag to fetch for ImageName
 	ImageTag = "latest"
 	// InitImageName represents the default init container image
-	InitImageName = "quay.io/iovisor/kubectl-trace-init"
+	InitImageName = "ghcr.io/cakemanny/kubectl-trace-init"
 	// InitImageTag represents the tag to fetch for InitImage
 	InitImageTag = "latest"
 	// DefaultDeadline is the maximum time a tracejob is allowed to run, in seconds
