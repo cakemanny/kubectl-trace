@@ -56,8 +56,11 @@ const (
 )
 
 var (
+	// TODO: use env var or -ldflags '-X ...'
+	TargetRuby = "ghcr.io/cakemanny/target-ruby"
 	ContainerDependencies = []string{
-		"ghcr.io/cakemanny/target-ruby",
+		TargetRuby,
+		// TODO: use IMAGE_NAME_INITCONTAINER
 		"ghcr.io/cakemanny/kubectl-trace-init",
 	}
 )
@@ -359,7 +362,10 @@ func (k *KubectlTraceSuite) runWithoutErrorWithStdin(input string, command strin
 }
 
 func (k *KubectlTraceSuite) createRubyTarget(namespace, name string, args ...string) (string, error) {
-	image := fmt.Sprintf("localhost:%d/iovisor/target-ruby:latest", RegistryRemotePort)
+	parsedImage, err := docker.ParseImageName(TargetRuby)
+	assert.Nil(k.T(), err)
+
+	image := fmt.Sprintf("localhost:%d/%s/%s:latest", RegistryRemotePort, parsedImage.Repository, parsedImage.Name)
 	command := append([]string{"./fork-from-args"}, args...)
 
 	clientConfig, err := clientcmd.BuildConfigFromFlags("", k.kubeConfigPath)

@@ -29,18 +29,21 @@ COPY pkg pkg
 RUN --mount=type=cache,target=/root/.cache/go-build make _output/bin/trace-runner
 RUN --mount=type=cache,target=/root/.cache/go-build make _output/bin/trace-uploader
 
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 # Install bcc by copying apt packages from docker image
-COPY --from=bcc /root/bcc /tmp/bcc
-RUN  apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y python python3 binutils libelf1 kmod && apt-get clean && \
-  dpkg -i /tmp/bcc/*.deb && rm -rf /tmp/bcc
+#COPY --from=bcc /root/bcc /tmp/bcc
+RUN --mount=type=cache,target=/var/cache/apt \
+  apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y python3 binutils libelf1 kmod bpftrace && \
+  apt-get clean
+  # dpkg -i /tmp/bcc/*.deb && rm -rf /tmp/bcc
 
 # Install CA certificates
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates && apt-get clean
+RUN --mount=type=cache,target=/var/cache/apt \
+  apt-get update && apt-get install -y ca-certificates && update-ca-certificates && apt-get clean
 
-COPY --from=bpftrace /usr/bin/bpftrace /usr/bin/bpftrace
+#COPY --from=bpftrace /usr/bin/bpftrace /usr/bin/bpftrace
 COPY --from=rbspy /usr/bin/rbspy /usr/bin/rbspy
 COPY --from=gobuilder /go/src/github.com/iovisor/kubectl-trace/_output/bin/trace-runner /bin/trace-runner
 COPY --from=gobuilder /go/src/github.com/iovisor/kubectl-trace/_output/bin/trace-uploader /bin/trace-uploader
