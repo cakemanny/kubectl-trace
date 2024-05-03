@@ -54,7 +54,7 @@ jobs:
       env: ${{matrix.env}}
       if: ${{ env.TEST_KUBERNETES_BACKEND == 'minikube' }}
       run: |
-        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        curl -LO https://storage.googleapis.com/minikube/releases/v1.24.0/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
     - name: Run integration tests
