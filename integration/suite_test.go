@@ -429,8 +429,15 @@ func (k *KubectlTraceSuite) createRubyTarget(namespace, name string, args ...str
 				if !ok {
 					return
 				}
-				pod = events.Object.(*apiv1.Pod)
-				status = pod.Status
+				switch v := events.Object.(type) {
+				case *apiv1.Pod:
+					pod = v
+					status = pod.Status
+					break
+				default:
+					fmt.Printf("unexpected event waiting for pod: %T %v\n", v, v)
+					continue
+				}
 				if pod.Status.Phase != apiv1.PodPending {
 					w.Stop()
 				}
