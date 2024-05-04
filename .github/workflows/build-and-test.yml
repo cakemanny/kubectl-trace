@@ -12,6 +12,9 @@ jobs:
         #- ubuntu-latest
         env:
         - TEST_KUBERNETES_BACKEND: minikube
+          MINIKUBE_VERSION: v1.23.2
+        - TEST_KUBERNETES_BACKEND: minikube
+          MINIKUBE_VERSION: v1.22.0
         # - TEST_KUBERNETES_BACKEND: kind
     steps:
     - uses: actions/checkout@v4
@@ -56,7 +59,7 @@ jobs:
       env: ${{matrix.env}}
       if: ${{ env.TEST_KUBERNETES_BACKEND == 'minikube' }}
       run: |
-        curl -LO https://storage.googleapis.com/minikube/releases/v1.23.0/minikube-linux-amd64
+        curl -LO https://storage.googleapis.com/minikube/releases/$MINIKUBE_VERSION/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
     - name: Run integration tests
