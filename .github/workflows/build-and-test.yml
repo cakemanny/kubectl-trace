@@ -12,7 +12,7 @@ jobs:
         - ubuntu-latest
         env:
         - TEST_KUBERNETES_BACKEND: minikube
-          MINIKUBE_VERSION: v1.33.2
+          MINIKUBE_VERSION: v1.31.2
         - TEST_KUBERNETES_BACKEND: kind
     steps:
     - uses: actions/checkout@v4
