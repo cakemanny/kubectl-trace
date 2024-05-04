@@ -9,13 +9,11 @@ jobs:
       matrix:
         os:
         - ubuntu-20.04
-        #- ubuntu-latest
+        - ubuntu-latest
         env:
         - TEST_KUBERNETES_BACKEND: minikube
           MINIKUBE_VERSION: v1.23.2
-        - TEST_KUBERNETES_BACKEND: minikube
-          MINIKUBE_VERSION: v1.22.0
-        # - TEST_KUBERNETES_BACKEND: kind
+        - TEST_KUBERNETES_BACKEND: kind
     steps:
     - uses: actions/checkout@v4
     - run: git fetch --prune --unshallow # We want tags
