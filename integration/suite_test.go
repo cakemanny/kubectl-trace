@@ -57,7 +57,7 @@ const (
 
 var (
 	// TODO: use env var or -ldflags '-X ...'
-	TargetRuby = "ghcr.io/cakemanny/target-ruby"
+	TargetRuby            = "ghcr.io/cakemanny/target-ruby"
 	ContainerDependencies = []string{
 		TargetRuby,
 		// TODO: use IMAGE_NAME_INITCONTAINER
@@ -232,6 +232,9 @@ func (k *KubectlTraceSuite) AfterTest(suiteName, testName string) {
 	if k.namespaces[testName].Passed {
 		// delete the namespace if the test passed
 		k.deleteNamespace(k.namespace())
+	} else {
+		k.printPodLogs(k.namespace())
+		k.printPodLogs(k.targetNamespace)
 	}
 	k.lastTest = ""
 }
@@ -304,6 +307,28 @@ func (k *KubectlTraceSuite) GetJobsInNamespace(namespace string) *batchv1.JobLis
 	assert.Nil(k.T(), err)
 
 	return jobs
+}
+
+func (k *KubectlTraceSuite) printPodLogs(namespace string) {
+	clientConfig, err := clientcmd.BuildConfigFromFlags("", k.kubeConfigPath)
+	assert.Nil(k.T(), err)
+
+	clientset, err := kubernetes.NewForConfig(clientConfig)
+	assert.Nil(k.T(), err)
+
+	pods, err := clientset.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{})
+
+	for _, p := range pods.Items {
+		fmt.Printf("~~ Pod: %s ~~\n", p.Name)
+		fmt.Printf("Status: %v\n", p.Status)
+
+		stream, err := clientset.CoreV1().Pods(namespace).GetLogs(p.Name, &apiv1.PodLogOptions{}).Stream(context.TODO())
+		if err != nil {
+			fmt.Printf("Failed to get pod logs: %v", err)
+		}
+		_, err = io.Copy(os.Stdout, stream)
+		assert.Nil(k.T(), err)
+	}
 }
 
 func (k *KubectlTraceSuite) namespace() string {
