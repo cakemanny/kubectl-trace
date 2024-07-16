@@ -70,7 +70,7 @@ jobs:
 #      uses: mxschmitt/action-tmate@v3
 
     - name: Build cross binaries
-      if: github.ref == 'refs/heads/master'
+      #if: github.ref == 'refs/heads/master'
       run: |
         go install github.com/goreleaser/goreleaser@latest
         make cross
