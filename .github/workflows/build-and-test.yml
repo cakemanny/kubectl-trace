@@ -60,6 +60,16 @@ jobs:
         curl -LO https://storage.googleapis.com/minikube/releases/$MINIKUBE_VERSION/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '>=1.19.0'
+
+    - name: Build cross binaries
+      #if: github.ref == 'refs/heads/master'
+      run: |
+        go install github.com/goreleaser/goreleaser@latest
+        make cross
+
     - name: Run integration tests
       env: ${{matrix.env}}
       run: |
@@ -69,19 +79,13 @@ jobs:
 #      if: ${{ failure() }}
 #      uses: mxschmitt/action-tmate@v3
 
-    - name: Build cross binaries
-      #if: github.ref == 'refs/heads/master'
-      run: |
-        go install github.com/goreleaser/goreleaser@latest
-        make cross
-
     - uses: actions/upload-artifact@v1
       with:
         name: ${{ matrix.os }}-kubectl-trace-dist
         path: _output/bin/kubectl-trace
 
     - uses: actions/upload-artifact@v1
-      if: github.ref == 'refs/heads/master'
+      #if: github.ref == 'refs/heads/master'
       with:
         name: ${{ matrix.os }}-kubectl-trace-cross-dist
         path: dist
