@@ -60,6 +60,15 @@ jobs:
         curl -LO https://storage.googleapis.com/minikube/releases/$MINIKUBE_VERSION/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
+    - name: Run integration tests
+      env: ${{matrix.env}}
+      run: |
+        make integration
+
+#    - name: Debug failure over SSH
+#      if: ${{ failure() }}
+#      uses: mxschmitt/action-tmate@v3
+
     - uses: actions/setup-go@v5
       with:
         go-version: '>=1.19.0'
@@ -70,14 +79,6 @@ jobs:
         go install github.com/goreleaser/goreleaser@latest
         make cross
 
-    - name: Run integration tests
-      env: ${{matrix.env}}
-      run: |
-        make integration
-
-#    - name: Debug failure over SSH
-#      if: ${{ failure() }}
-#      uses: mxschmitt/action-tmate@v3
 
     - uses: actions/upload-artifact@v1
       with:
