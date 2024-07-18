@@ -37,6 +37,10 @@ jobs:
       env:
         QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '>=1.19.0'
+
     - name: Run tests
       run: |
         make test
@@ -69,10 +73,6 @@ jobs:
 #      if: ${{ failure() }}
 #      uses: mxschmitt/action-tmate@v3
 
-    - uses: actions/setup-go@v5
-      with:
-        go-version: '>=1.19.0'
-
     - name: Build cross binaries
       #if: github.ref == 'refs/heads/master'
       run: |
@@ -80,12 +80,12 @@ jobs:
         make cross
 
 
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.os }}-kubectl-trace-dist
         path: _output/bin/kubectl-trace
 
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v4
       #if: github.ref == 'refs/heads/master'
       with:
         name: ${{ matrix.os }}-kubectl-trace-cross-dist
